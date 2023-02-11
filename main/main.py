@@ -1,5 +1,5 @@
 import requests, json
-
+from bs4 import BeautifulSoup
 
 class Liberty:
 
@@ -66,14 +66,44 @@ class Liberty:
 
         return virustotal_subdomains_parser()
     
+    def whois_lookup(self):
+        response = requests.get(f"https://who.is/whois/{self.target_domain}")
 
-    
+        if response.status_code == 200:
+            html = response.text
+            soup = BeautifulSoup(html, 'html.parser')
+            pre_tag = soup.pre
+            pre_tag = pre_tag.get_text
+            x = pre_tag.__str__().split('\n')
+            out = ""
+            for i in x:
+                if i.startswith("<") or i.startswith("%"):
+                    continue
+                else:
+                    out += i + "\n"
+            return out
+        else:
+            return "Error: WHOIS lookup failed."
+
+    def create_txt_output(self):
+        output_domain = self.target_domain[:self.target_domain.index(".")]
+        with open(f"../data_collect/{output_domain}.txt", "w") as file:
+            file.write(f"Data Collected for domain {self.target_domain}\n\n")
+            file.write("Who Is LookUp: \n")
+            file.write(self.whois_lookup())
+            file.write("\nVirustotal Subdomains Found: \n\n")
+            for i in self.get_virustotal_subdomains():
+                for j in i:
+                    file.write(j + "   ")
+                file.write("\n")
+
 if __name__ == "__main__":
     liberty = Liberty()
     liberty.display_visual_menu()
     liberty.get_target_domain()
     print(liberty.get_virustotal_subdomains())
-
+    print(liberty.whois_lookup())
+    liberty.create_txt_output()
 
 
 
