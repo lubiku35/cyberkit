@@ -1,5 +1,3 @@
-import builtwith
+import sys
 
-url = "https://www.formaco.cz"
-print(builtwith.parse(url))
-
+print(sys.path)
