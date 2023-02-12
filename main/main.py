@@ -1,4 +1,4 @@
-import requests, json
+import requests, json, os
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
@@ -12,7 +12,8 @@ class Liberty:
         }
         self.driver = ""                                                                            # INITIALIZE DEFAULT WEBDRIVER
         self.virustotal_subdomains = []
-
+        self.cwd = os.getcwd()                                                                      # CURRENT WORKING DIRECTORY
+    
     # VISUAL MENU
     def display_visual_menu(self):
         print("")
@@ -49,6 +50,7 @@ class Liberty:
                 domain_id = data["data"][counter]["id"]                                             # Domain Name
                 last_dns_record_ip = data["data"][counter]["attributes"]["last_dns_records"]        # subdomain IP
 
+                # Finding Ips 
                 for j in last_dns_record_ip:
                     if "A" in j.values():
                         subdomain_data.append(j["value"])
@@ -62,6 +64,7 @@ class Liberty:
 
         url = f"https://www.virustotal.com/api/v3/domains/{self.target_domain}/subdomains?limit=1000"
 
+        # Virustotal response
         response = requests.get(url, headers=self.headers)
 
         with open("../data_collect/subdomains.json", "w") as file:
@@ -79,6 +82,8 @@ class Liberty:
             pre_tag = pre_tag.get_text
             x = pre_tag.__str__().split('\n')
             out = ""
+
+            # deleting bad formats
             for i in x:
                 if i.startswith("<") or i.startswith("%"):
                     continue
@@ -88,14 +93,32 @@ class Liberty:
         else:
             return "Error: WHOIS lookup failed."
 
-    def create_txt_output(self):
+    def create_output(self):
         output_domain = self.target_domain[:self.target_domain.index(".")]
-        with open(f"../data_collect/{output_domain}.txt", "w") as file:
+
+        def get_correct_path(output_domain):
+            directory = f"outputs//{output_domain}"
+            correct_path = ""
+            for i in self.cwd:
+                if i == '\\':
+                    i = "/"
+                    correct_path += i
+                correct_path += i
+            return correct_path + "//" + directory
+
+        def create_target_directory():
+            return os.mkdir(get_correct_path(output_domain=output_domain))
+
+        
+        create_target_directory()
+        self.cwd = get_correct_path(output_domain=output_domain)
+
+        with open(f"{self.cwd}//{output_domain}.txt", "w") as file:
             file.write(f"Data Collected for domain {self.target_domain}\n\n")
             file.write("Who Is LookUp: \n")
             file.write(self.whois_lookup())
             file.write("\nVirustotal Subdomains Found: \n\n")
-            for i in self.get_virustotal_subdomains():
+            for i in self.virustotal_subdomains:
                 for j in i:
                     file.write(j + "   ")
                 file.write("\n")
@@ -152,6 +175,7 @@ if __name__ == "__main__":
     # liberty.create_txt_output()
     liberty.is_reachable_subdomain()
     liberty.print_subdomains()
+    liberty.create_output()
 
 
 
