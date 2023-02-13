@@ -59,15 +59,15 @@ created:      11.11.2019 14:34:25<br/><br/>Information Updated: 2023-02-11 12:12
 
 Virustotal Subdomains Found: 
 
-217.11.249.145   mycom.cz   
-109.123.220.168   podpora.mycom.cz   
-52.96.73.56   52.96.79.200   52.96.79.8   52.96.79.40   autodiscover.mycom.cz   
-81.2.195.30   test.mycom.cz   
-109.123.220.171   ftp.mycom.cz   
-109.123.220.169   reaqta.mycom.cz   
-109.123.220.155   forticems.mycom.cz   
-217.11.249.145   dev.mycom.cz   
-antispam.mycom.cz   
-109.123.220.168   support.mycom.cz   
-217.11.249.145   www.mycom.cz   
-23.236.62.147   seminar.mycom.cz   
+217.11.249.145   mycom.cz   True   
+109.123.220.168   podpora.mycom.cz   True   
+52.96.73.56   52.96.79.200   52.96.79.8   52.96.79.40   autodiscover.mycom.cz   False   
+81.2.195.30   test.mycom.cz   False   
+109.123.220.171   ftp.mycom.cz   False   
+109.123.220.169   reaqta.mycom.cz   False   
+109.123.220.155   forticems.mycom.cz   True   
+217.11.249.145   dev.mycom.cz   True   
+antispam.mycom.cz   False   
+109.123.220.168   support.mycom.cz   True   
+217.11.249.145   www.mycom.cz   True   
+23.236.62.147   seminar.mycom.cz   False   

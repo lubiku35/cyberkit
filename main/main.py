@@ -107,10 +107,20 @@ class Liberty:
             return correct_path + "//" + directory
 
         def create_target_directory():
-            return os.mkdir(get_correct_path(output_domain=output_domain))
-
+            try:
+                return os.mkdir(get_correct_path(output_domain=output_domain))
+            except:
+                return
         
+        def create_screenshots_directory():
+            try:
+                return os.mkdir(get_correct_path(output_domain=output_domain) + "//screenshots")
+            except:
+                return
+
         create_target_directory()
+        create_screenshots_directory()
+
         self.cwd = get_correct_path(output_domain=output_domain)
 
         with open(f"{self.cwd}//{output_domain}.txt", "w") as file:
@@ -162,9 +172,6 @@ class Liberty:
             print(i)
         return
 
-# # Load the URL
-# url = "https://www.jhv.cz"
-# driver.get(url)
 
 if __name__ == "__main__":
     liberty = Liberty()
