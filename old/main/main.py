@@ -72,7 +72,8 @@ class Liberty:
 
         return virustotal_subdomains_parser()
 
-    def whois_lookup(self):
+    def whois_lookup(self): 
+        
         response = requests.get(f"https://who.is/whois/{self.target_domain}")
 
         if response.status_code == 200:
