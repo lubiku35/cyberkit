@@ -3,4 +3,7 @@
 class Whois:
     
     def __init__(self) -> None:
-        pass
+        self.message = "hello whois"
+
+    def test(self):
+        return self.message

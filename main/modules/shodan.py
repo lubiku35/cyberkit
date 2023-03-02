@@ -3,4 +3,7 @@
 class Shodan:
     
     def __init__(self) -> None:
-        pass
+        self.message = "hello shodan"
+
+    def test(self):
+        return self.message

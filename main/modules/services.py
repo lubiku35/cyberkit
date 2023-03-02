@@ -3,4 +3,7 @@
 class Services:
     
     def __init__(self) -> None:
-        pass
+        self.message = "hello services"
+
+    def test(self):
+        return self.message

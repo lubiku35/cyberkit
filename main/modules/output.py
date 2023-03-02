@@ -3,4 +3,7 @@
 class Output:
     
     def __init__(self) -> None:
-        pass
+        self.message = "hello output"
+
+    def test(self):
+        return self.message

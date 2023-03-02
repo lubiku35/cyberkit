@@ -3,4 +3,7 @@
 class Dns:
     
     def __init__(self) -> None:
-        pass
+        self.message = "hello dns"
+
+    def test(self):
+        return self.message

@@ -2,4 +2,7 @@
 class Ports:
     
     def __init__(self) -> None:
-        pass
+        self.message = "hello ports"
+
+    def test(self):
+        return self.message
