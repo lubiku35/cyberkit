@@ -3,8 +3,11 @@ from dotenv import load_dotenv
 
 class Virustotal:
 
-    def __init__(self, message = "", headers = {}) -> None:
-        self.message = "hello virustotal"
+    def __init__(self, menu = {}, headers = {}, target_info = {}) -> None:
+        self.menu = {
+            "menu_item": "command"
+        }
+
         self.headers = headers
     
     def read_env(self):
@@ -19,6 +22,13 @@ class Virustotal:
             define_headers()
             print("Headers for Virustoal API created succesfully")
             return
+    
+
+    def get_menu():
+        pass
+
+
+
 
     
     def test(self):
