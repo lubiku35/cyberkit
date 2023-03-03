@@ -1,8 +1,13 @@
+"""
+    OSINT - Information Gathering Tool
+    author:  @lubiku35
+"""
+# Production file
 import production
 
 class Main:
 
-    def __init__(self, target_info = {}) -> None:
+    def __init__(self) -> None:
         pass
 
 
