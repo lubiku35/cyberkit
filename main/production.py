@@ -20,7 +20,8 @@ def get_user_menu_input():
     if user_menu_input == "-ti":
         callback_target = target.Target()
         callback_target.define_target_info()
-    
+        print(callback_target.return_target_info())
+
 def main():
     callback_menu = menu.Menu()
     callback_menu.project_menu()

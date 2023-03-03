@@ -34,7 +34,8 @@ class Target:
             while True:
                 user_target_input_domain = input("$ ")
             
-                if is_tld_present(user_target_input=user_target_input_domain): 
+                if is_tld_present(user_target_input=user_target_input_domain):
+                    self.target_info["target_domain"] = correct_formalization(user_target_input=user_target_input_domain)
                     print("'target_domain' successfully set")
                     return True
                 else: print("Something went wrong creating 'target_domain' info, please provide correct domain with correct tld [top level domain]")
@@ -49,3 +50,6 @@ class Target:
                     define_target_domain()      
                     return
             return
+
+    def return_target_info(self):
+        return self.target_info
