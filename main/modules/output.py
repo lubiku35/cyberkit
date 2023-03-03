@@ -1,4 +1,4 @@
-
+import os
 
 class Output:
     
@@ -6,4 +6,9 @@ class Output:
         self.message = "hello output"
 
     def test(self):
-        return self.message
+        return "".join([i if i != "\\" else "/" for i in os.getcwd()]) + f"/out/xd"
+    
+
+if __name__ == "__main__":
+    out = Output()
+    print(out.test())

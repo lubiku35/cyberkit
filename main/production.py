@@ -13,15 +13,27 @@ import modules.screenshots as screenshots   # defined as callback_screenshots
 import modules.services as services         # defined as callback_services
 import modules.menu as menu                 # defined as callback_menu
 
+
 def get_user_menu_input():
-    user_menu_input = input("$ ")
-    user_menu_input = user_menu_input.replace(" ", "").lower()
+    # GLOBALS 
+    TARGET_INFO = {} 
+    
+    while True:
+        user_menu_input = input("$ ")
+        user_menu_input = user_menu_input.replace(" ", "").lower()
 
-    if user_menu_input == "-ti":
-        callback_target = target.Target()
-        callback_target.define_target_info()
-        print(callback_target.return_target_info())
-
+        if user_menu_input == "-ti":
+            callback_target = target.Target()
+            callback_target.define_target_info()
+            TARGET_INFO = callback_target.return_target_info()
+        elif user_menu_input == "-vt":
+            if TARGET_INFO != {}: 
+                callback_virustotal = virustotal.Virustotal(target_info=TARGET_INFO)
+                callback_virustotal.force_virustotal_subdomain_scan()
+            else: print("Dependencies for target info misssing, set target info first by using command -ti")
+        elif user_menu_input == "-exit":
+            return
+    
 def main():
     callback_menu = menu.Menu()
     callback_menu.project_menu()
