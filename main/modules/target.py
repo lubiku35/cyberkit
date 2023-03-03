@@ -39,9 +39,6 @@ class Target:
                     return True
                 else: print("Something went wrong creating 'target_domain' info, please provide correct domain with correct tld [top level domain]")
 
-            
-
-
         get_info()
 
         while True:

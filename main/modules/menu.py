@@ -4,7 +4,8 @@ class Menu:
     def __init__(self, commands_list = {}) -> None:
         self.commands_list = {
             "-help": "Print help",
-            "-ti": "Set target info"
+            "-ti": "Set target info",
+            "-exit": "Exit this script"
         }
 
     def project_menu(self):
