@@ -1,14 +1,13 @@
-import os, requests
+import os, requests, json
 from dotenv import load_dotenv
 
 class Virustotal:
 
-    def __init__(self, target_info = {}, menu = {}, headers = {}) -> None:
+    def __init__(self, target_info = {}, subdomains_count = 0, subdomains_data_list = [], ips_for_subdomains = {}, menu = {}, headers = {}) -> None:
         self.target_info = target_info
-        self.menu = {
-            "menu_item": "command"
-        }
-
+        self.subdomains_count = subdomains_count
+        self.subdomains_data_list = subdomains_data_list
+        self.ips_for_subdomains = ips_for_subdomains
         self.headers = headers
     
     def read_env(self):
@@ -25,6 +24,7 @@ class Virustotal:
             return
     
     def force_virustotal_subdomain_scan(self):
+        
         self.read_env()
 
         if self.target_info != {}:
@@ -43,14 +43,47 @@ class Virustotal:
             except Exception as e:
                 print("Error requesting virustotal server")
                 return
+        
+        def get_subdomains_count():
+            with open("./data/vt_subdomains.json", "r") as file: 
+                data = json.load(file)
+                self.subdomains_count = data["meta"]["count"]
+            return self.subdomains_count
 
+        def parse_json_subdomains():
+            with open("./data/vt_subdomains.json", "r") as file: data = json.load(file)
+            counter = 0
+            for i in data["data"]:
+                domain_id = data["data"][counter]["id"]
+                self.subdomains_data_list.append(domain_id)
+                counter += 1
+            return self.subdomains_data_list
+        
+        def parse_json_subdomains_ips():
+            with open("./data/vt_subdomains.json", "r") as file: data = json.load(file)
+            counter = 0
+            for i in data["data"]:
+                subdomain_data, domain_ip_dns_record = [], data["data"][counter]["attributes"]["last_dns_records"]
+                for j in domain_ip_dns_record:
+                    if "A" in j.values(): subdomain_data.append(j["value"])                                          # "A" -> IP
+                self.ips_for_subdomains[self.subdomains_data_list[counter]] = subdomain_data
+                counter += 1
+            return self.ips_for_subdomains
+
+        def check_reachability(subdomains):
+            pass
+        
         manipulate_response(url=url)
-    
+        get_subdomains_count()
+        parse_json_subdomains()
+        parse_json_subdomains_ips()
+        check_reachability(subdomains=self.subdomains_data_list)
     
 
     def get_menu():
         pass
     
     def test(self):
-        print(self.target_info)
+        print(self.subdomains_data_list)
+        print(self.ips_for_subdomains)
 

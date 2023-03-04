@@ -30,6 +30,7 @@ def get_user_menu_input():
             if TARGET_INFO != {}: 
                 callback_virustotal = virustotal.Virustotal(target_info=TARGET_INFO)
                 callback_virustotal.force_virustotal_subdomain_scan()
+                callback_virustotal.test()
             else: print("Dependencies for target info misssing, set target info first by using command -ti")
         elif user_menu_input == "-exit":
             return
