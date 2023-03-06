@@ -98,6 +98,7 @@ class Main:
         def get_target_name() -> bool:
             try:
                 USER_INPUT = input("Define target name: ")
+                USER_INPUT.replace(" ", "_")
                 self.target_info["target_name"] = correct_formalization(USER_INPUT = USER_INPUT) 
                 print("Target name succesfully set\n")
                 return True
