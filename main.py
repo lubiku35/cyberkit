@@ -51,6 +51,7 @@ class Main:
                 if USER_CHOICE == "-all":
                     print("OSINT Analyzation in progress")
                     self.generate_output_folder()
+                    CALLBACK_VIRUSTOTAL, CALLBACK_SHODAN, CALLBACK_WHOIS, CALLBACK_DNS = virustotal.Virustotal(self.target_info), shodan.Shodan(self.target_info), whois.Whois(self.target_info), dns.DNS(self.target_info)                                        
                     break
                 if USER_CHOICE == "-v":
                     print("Calling virustotal script\n")
@@ -61,19 +62,19 @@ class Main:
                 elif USER_CHOICE == "-s":
                     print("Calling shodan script\n")
                     self.generate_output_folder()
-                    CALLBACK_SHODAN = virustotal.Virustotal(self.target_info)
+                    CALLBACK_SHODAN = shodan.Shodan(self.target_info)
                     CALLBACK_SHODAN.check()
                     break  
                 elif USER_CHOICE == "-w":
                     print("Calling whois script\n")
                     self.generate_output_folder()
-                    CALLBACK_WHOIS = virustotal.Virustotal(self.target_info)
-                    CALLBACK_WHOIS.check()
+                    CALLBACK_WHOIS = whois.Whois(self.target_info)
+                    CALLBACK_WHOIS.process_whois_lookup()
                     break   
                 elif USER_CHOICE == "-d":
                     print("Calling dns script\n")
                     self.generate_output_folder()
-                    CALLBACK_DNS = virustotal.Virustotal(self.target_info)
+                    CALLBACK_DNS = dns.DNS(self.target_info)
                     CALLBACK_DNS.check()
                     break  
             else:
