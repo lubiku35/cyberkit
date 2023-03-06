@@ -1,12 +1,13 @@
 from modules import dns, shodan, virustotal, whois
 
 import re, os
+from dotenv import load_dotenv
 
 class Main:
     
-    def __init__(self, target_info = {}, ) -> None:
+    def __init__(self, target_info = {}, API_keys = {}) -> None:
         self.target_info = target_info                # "target_name", "target_domain"
-
+        self.API_keys = API_keys
     def menu(self):
         print("\n\n\t\t-h \t\t\t\t\tPrint help message")
         print("\t\t-ti \t\t\t\t\tCheck actual target information")
@@ -56,7 +57,8 @@ class Main:
                 if USER_CHOICE == "-v":
                     print("Calling virustotal script\n")
                     self.generate_output_folder()
-                    CALLBACK_VIRUSTOTAL = virustotal.Virustotal(self.target_info)
+                    self.load_env_file()
+                    CALLBACK_VIRUSTOTAL = virustotal.Virustotal(self.target_info, self.API_keys.get("VIRUSTOTAL_API_KEY"))
                     CALLBACK_VIRUSTOTAL.check()
                     break  
                 elif USER_CHOICE == "-s":
@@ -136,6 +138,15 @@ class Main:
             print(f"Something went wrong creating a folder, maybe {self.target_info.get('target_name')} folder already exists")
             return 
     
+    # create .env file where main function is and pass the values in in format: 
+    # VIRUSTOTAL_API_KEY = yourVirustotalApiKey
+    # SHODAN_API_KEY = yourShodanApiKey
+    def load_env_file(self):
+        load_dotenv()
+        self.API_keys["VIRUSTOTAL_API_KEY"] = os.getenv("VIRUSTOTAL_API_KEY")
+        self.API_keys["SHODAN_API_KEY"] = os.getenv("SHODAN_API_KEY")
+        return self.API_keys
+
 if __name__ == "__main__":
     main = Main()
     main.main_menu()
