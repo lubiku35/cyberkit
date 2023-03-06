@@ -7,7 +7,7 @@ class Main:
     
     def __init__(self, target_info = {}, API_keys = {}) -> None:
         self.target_info = target_info                # "target_name", "target_domain"
-        self.API_keys = API_keys
+        self.API_keys = API_keys                      # "VIRUSTOTAL_API_KEY", "SHODAN_API_KEY"
     
     def menu(self):
         print("\n\n\t\t-h \t\t\t\t\tPrint help message")
@@ -65,7 +65,7 @@ class Main:
                 elif USER_CHOICE == "-s":
                     print("Calling shodan script\n")
                     self.generate_output_folder()
-                    CALLBACK_SHODAN = shodan.Shodan(self.target_info)
+                    CALLBACK_SHODAN = shodan.Shodan(self.target_infoo, self.API_keys.get("SHODAN_API_KEY"))
                     CALLBACK_SHODAN.check()
                     break  
                 elif USER_CHOICE == "-w":
@@ -139,7 +139,7 @@ class Main:
             print(f"Something went wrong creating a folder, maybe {self.target_info.get('target_name')} folder already exists")
             return 
     
-    # create .env file where main function is and pass the values in in format: 
+    # create .env file where main function is and pass the values in this format: 
     # VIRUSTOTAL_API_KEY = yourVirustotalApiKey
     # SHODAN_API_KEY = yourShodanApiKey
     def load_env_file(self):
