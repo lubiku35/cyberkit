@@ -55,18 +55,26 @@ class Main:
                 if USER_CHOICE == "-v":
                     print("Calling virustotal script\n")
                     self.generate_output_folder()
+                    CALLBACK_VIRUSTOTAL = virustotal.Virustotal(self.target_info)
+                    CALLBACK_VIRUSTOTAL.check()
                     break  
                 elif USER_CHOICE == "-s":
                     print("Calling shodan script\n")
                     self.generate_output_folder()
+                    CALLBACK_SHODAN = virustotal.Virustotal(self.target_info)
+                    CALLBACK_SHODAN.check()
                     break  
                 elif USER_CHOICE == "-w":
                     print("Calling whois script\n")
                     self.generate_output_folder()
+                    CALLBACK_WHOIS = virustotal.Virustotal(self.target_info)
+                    CALLBACK_WHOIS.check()
                     break   
                 elif USER_CHOICE == "-d":
                     print("Calling dns script\n")
                     self.generate_output_folder()
+                    CALLBACK_DNS = virustotal.Virustotal(self.target_info)
+                    CALLBACK_DNS.check()
                     break  
             else:
                 print("Target info not defined can't call the script\n")
