@@ -8,6 +8,7 @@ class Main:
     def __init__(self, target_info = {}, API_keys = {}) -> None:
         self.target_info = target_info                # "target_name", "target_domain"
         self.API_keys = API_keys
+    
     def menu(self):
         print("\n\n\t\t-h \t\t\t\t\tPrint help message")
         print("\t\t-ti \t\t\t\t\tCheck actual target information")
@@ -59,7 +60,7 @@ class Main:
                     self.generate_output_folder()
                     self.load_env_file()
                     CALLBACK_VIRUSTOTAL = virustotal.Virustotal(self.target_info, self.API_keys.get("VIRUSTOTAL_API_KEY"))
-                    CALLBACK_VIRUSTOTAL.check()
+                    CALLBACK_VIRUSTOTAL.process_virustotal_lookup()
                     break  
                 elif USER_CHOICE == "-s":
                     print("Calling shodan script\n")
