@@ -61,6 +61,7 @@ class Main:
                     self.load_env_file()
                     CALLBACK_VIRUSTOTAL = virustotal.Virustotal(self.target_info, self.API_keys.get("VIRUSTOTAL_API_KEY"))
                     CALLBACK_VIRUSTOTAL.process_virustotal_lookup()
+                    CALLBACK_VIRUSTOTAL.process_subdomains_reachability()
                     break  
                 elif USER_CHOICE == "-s":
                     print("Calling shodan script\n")

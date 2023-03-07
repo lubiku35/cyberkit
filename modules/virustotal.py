@@ -33,6 +33,7 @@ class Virustotal:
         manipulate_response(url=URL)
         self.collect_subdomains_data()
         return
+    
     def collect_subdomains_data(self):
 
         def create_subdomains_count_as_txt(DATA):
@@ -63,18 +64,62 @@ class Virustotal:
         create_subdomains_count_as_txt(DATA=self.SUBDOMAINS_COUNT)
         create_subdomains_excel_output(DATA=self.SUBDOMAINS_DATA)
         return 
-    
-    def process_subdomains_reachability():
-        pass
+        
+    def process_subdomains_reachability(self):
+        
+        def check_https_subdomains_reachability(SUBDOMAINS):
+            
+            def create_https_reachability_txt_output(data):
+                with open(f"./out/{self.target_info.get('target_name')}/virustotal_https_reachability.txt", "w") as file:
+                    file.write("HTTPS SUBDOMAINS REACHABILITY\n\n")
+                    data.insert(0, ("Subomain", "Is reachable", "Status\n"))
+                    for i in data:
+                        for j in i:
+                            j = str(j)
+                            while len(j) <= 32: j += " "
+                            file.write(str(j))
+                        file.write("\n")
 
+            HTTPS_SUBDOMAINS_REACHABILITY = []
+            for subdomain in SUBDOMAINS.keys():
+                try:
+                    RESPONSE = requests.get(url=f"http://{subdomain}", timeout=10)
+                    if RESPONSE.status_code == 200: HTTPS_SUBDOMAINS_REACHABILITY.append((subdomain, True, "200"))
+                except requests.exceptions.RequestException as e: HTTPS_SUBDOMAINS_REACHABILITY.append((subdomain, False, "500")) if "[Errno 11001]" or "getaddrinfo failed" in str(e) else HTTPS_SUBDOMAINS_REACHABILITY.append((subdomain, False, "Check by User"))
+                
+            return create_https_reachability_txt_output(data=HTTPS_SUBDOMAINS_REACHABILITY)
+
+        def check_http_subdomains_reachability(SUBDOMAINS):
+
+            def create_http_reachability_txt_output(data):
+                with open(f"./out/{self.target_info.get('target_name')}/virustotal_http_reachability.txt", "w") as file:
+                    file.write("HTTP SUBDOMAINS REACHABILITY\n\n")
+                    data.insert(0, ("Subomain", "Is reachable", "Status\n"))
+                    for i in data:
+                        for j in i:
+                            j = str(j)
+                            while len(j) <= 32: j += " "
+                            file.write(str(j))
+                        file.write("\n")
+
+            HTTP_SUBDOMAINS_REACHABILITY = []
+            for subdomain in SUBDOMAINS.keys():
+                try:
+                    RESPONSE = requests.get(url=f"http://{subdomain}", timeout=10)
+                    if RESPONSE.status_code == 200: HTTP_SUBDOMAINS_REACHABILITY.append((subdomain, True, "200"))
+                except requests.exceptions.RequestException as e: HTTP_SUBDOMAINS_REACHABILITY.append((subdomain, False, "500")) if "[Errno 11001]" or "getaddrinfo failed" in str(e) else HTTP_SUBDOMAINS_REACHABILITY.append((subdomain, False, "Check by User"))
+            
+            return create_http_reachability_txt_output(data=HTTP_SUBDOMAINS_REACHABILITY) 
+        
+        check_https_subdomains_reachability(SUBDOMAINS=self.SUBDOMAINS_DATA)
+        check_http_subdomains_reachability(SUBDOMAINS=self.SUBDOMAINS_DATA)
+
+    # TO DO
     def create_subdomains_screenshots():
 
         def create_screenshots_folder():
             pass
         
-
-    
-
     def check(self):
         self.create_headers()
         print(self.target_info)
