@@ -1,0 +1,34 @@
+HTTPS SUBDOMAINS REACHABILITY
+
+Subomain                         Is reachable                     Status
+                          
+muj.proficredit.cz               True                             200                              
+smtps.proficredit.cz             False                            500                              
+posta.proficredit.cz             False                            500                              
+owa.proficredit.cz               False                            500                              
+e.proficredit.cz                 False                            500                              
+helpdesk.proficredit.cz          False                            500                              
+callcentrum.proficredit.cz       False                            500                              
+gw.proficredit.cz                False                            500                              
+share.proficredit.cz             False                            500                              
+pop3.proficredit.cz              False                            500                              
+ftp.proficredit.cz               False                            500                              
+smtp.proficredit.cz              False                            500                              
+dev-lp.proficredit.cz            True                             200                              
+ads.proficredit.cz               True                             200                              
+core-partner.proficredit.cz      True                             200                              
+klientskyportal.proficredit.cz   False                            500                              
+lp.proficredit.cz                False                            500                              
+lyncdiscover.proficredit.cz      True                             200                              
+mailpce.proficredit.cz           False                            500                              
+partner.proficredit.cz           True                             200                              
+sip.proficredit.cz               False                            500                              
+pbx.proficredit.cz               False                            500                              
+mail.proficredit.cz              False                            500                              
+dev-ads.proficredit.cz           True                             200                              
+egate.proficredit.cz             False                            500                              
+email.proficredit.cz             False                            500                              
+autodiscover.proficredit.cz      True                             200                              
+dev-partner.proficredit.cz       True                             200                              
+dev-core-partner.proficredit.cz  True                             200                              
+www.proficredit.cz               True                             200                              

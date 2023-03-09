@@ -1,17 +1,25 @@
-import requests, json, xlsxwriter
+import requests, json
 import pandas as pd
 
 class Virustotal:
 
-    def __init__(self, target_info, api_key, headers = {}, SUBDOMAINS_DATA = {}, SUBDOMAINS_COUNT = 0) -> None:
+    def __init__(self, target_info, api_key, headers = {}, SUBDOMAINS_DATA = {}, SUBDOMAINS_COUNT = 0, HTTP_SUBDOMAINS_REACHABILITY = [], HTTPS_SUBDOMAINS_REACHABILITY = []) -> None:
+        # Neccessary data to start this script 
         self.target_info = target_info
         self.api_key = api_key
         self.headers = headers
 
+        # Master Subdomains Data
         self.SUBDOMAINS_DATA = SUBDOMAINS_DATA
         self.SUBDOMAINS_COUNT = SUBDOMAINS_COUNT
 
+        # Reachability data 
+        self.HTTP_SUBDOMAINS_REACHABILITY = HTTP_SUBDOMAINS_REACHABILITY
+        self.HTTPS_SUBDOMAINS_REACHABILITY = HTTPS_SUBDOMAINS_REACHABILITY
+
+
     def create_headers(self):
+        # headers for virustotal api 
         self.headers["x-apikey"] = self.api_key
         return self.headers
     
@@ -21,17 +29,14 @@ class Virustotal:
         def manipulate_response(url: str):
             try:
                 virustotal_server_respose = requests.get(url, headers=self.headers)
-                if virustotal_server_respose.status_code == 200: print("Website is up and running...")
+                if virustotal_server_respose.status_code == 200: print("Website is up and running")
                 else: print(f"Error accessing website. Status code: {virustotal_server_respose.status_code}")
-                with open("./data/vt_subdomains.json", "w") as file: 
-                    print("Data successfully accessed and created\n")
-                    return file.write(virustotal_server_respose.text)
-            except Exception as e:
-                print("Error requesting virustotal server\n")
-                return
+                with open("./data/vt_subdomains.json", "w") as file: print("Data successfully accessed and created in vt_subdomains.json file"); return file.write(virustotal_server_respose.text)
+            except Exception as e: print("Error requesting virustotal server\n"); return
         self.create_headers()
         manipulate_response(url=URL)
         self.collect_subdomains_data()
+        print("Data from Virustotal about subdomains collected successfully!")
         return
     
     def collect_subdomains_data(self):
@@ -48,6 +53,7 @@ class Virustotal:
             writer = pd.ExcelWriter(f'./out/{self.target_info.get("target_name")}/subdomains.xlsx', engine='xlsxwriter')
             df.to_excel(writer, index=False)
             writer.close()
+            print("Virustotal data proccessed successfully!")
             return 
         
         with open("./data/vt_subdomains.json", "r") as file: DATA = json.load(file)
@@ -57,9 +63,8 @@ class Virustotal:
             SUBDOMAIN_NAME = i.get("id")        
             LAST_DNS_RECORDS_DATA = i.get("attributes").get("last_dns_records")
             SUBDOMAIN_IPS = []
-            for i in LAST_DNS_RECORDS_DATA:
-                if i["type"] == "A": SUBDOMAIN_IPS.append(i.get("value"))
-                self.SUBDOMAINS_DATA[SUBDOMAIN_NAME] = SUBDOMAIN_IPS
+            for i in LAST_DNS_RECORDS_DATA: 
+                if i["type"] == "A": SUBDOMAIN_IPS.append(i.get("value")); self.SUBDOMAINS_DATA[SUBDOMAIN_NAME] = SUBDOMAIN_IPS
         
         create_subdomains_count_as_txt(DATA=self.SUBDOMAINS_COUNT)
         create_subdomains_excel_output(DATA=self.SUBDOMAINS_DATA)
@@ -80,14 +85,14 @@ class Virustotal:
                             file.write(str(j))
                         file.write("\n")
 
-            HTTPS_SUBDOMAINS_REACHABILITY = []
+            self.HTTPS_SUBDOMAINS_REACHABILITY = []
             for subdomain in SUBDOMAINS.keys():
                 try:
                     RESPONSE = requests.get(url=f"http://{subdomain}", timeout=10)
-                    if RESPONSE.status_code == 200: HTTPS_SUBDOMAINS_REACHABILITY.append((subdomain, True, "200"))
-                except requests.exceptions.RequestException as e: HTTPS_SUBDOMAINS_REACHABILITY.append((subdomain, False, "500")) if "[Errno 11001]" or "getaddrinfo failed" in str(e) else HTTPS_SUBDOMAINS_REACHABILITY.append((subdomain, False, "Check by User"))
+                    if RESPONSE.status_code == 200: self.HTTPS_SUBDOMAINS_REACHABILITY.append((subdomain, True, "200"))
+                except requests.exceptions.RequestException as e: self.HTTPS_SUBDOMAINS_REACHABILITY.append((subdomain, False, "500")) if "[Errno 11001]" or "getaddrinfo failed" in str(e) else self.HTTPS_SUBDOMAINS_REACHABILITY.append((subdomain, False, "Check by User"))
                 
-            return create_https_reachability_txt_output(data=HTTPS_SUBDOMAINS_REACHABILITY)
+            return create_https_reachability_txt_output(data=self.HTTPS_SUBDOMAINS_REACHABILITY)
 
         def check_http_subdomains_reachability(SUBDOMAINS):
 
@@ -102,23 +107,23 @@ class Virustotal:
                             file.write(str(j))
                         file.write("\n")
 
-            HTTP_SUBDOMAINS_REACHABILITY = []
+            self.HTTP_SUBDOMAINS_REACHABILITY = []
             for subdomain in SUBDOMAINS.keys():
                 try:
                     RESPONSE = requests.get(url=f"http://{subdomain}", timeout=10)
-                    if RESPONSE.status_code == 200: HTTP_SUBDOMAINS_REACHABILITY.append((subdomain, True, "200"))
-                except requests.exceptions.RequestException as e: HTTP_SUBDOMAINS_REACHABILITY.append((subdomain, False, "500")) if "[Errno 11001]" or "getaddrinfo failed" in str(e) else HTTP_SUBDOMAINS_REACHABILITY.append((subdomain, False, "Check by User"))
+                    if RESPONSE.status_code == 200: self.HTTP_SUBDOMAINS_REACHABILITY.append((subdomain, True, "200"))
+                except requests.exceptions.RequestException as e: self.HTTP_SUBDOMAINS_REACHABILITY.append((subdomain, False, "500")) if "[Errno 11001]" or "getaddrinfo failed" in str(e) else self.HTTP_SUBDOMAINS_REACHABILITY.append((subdomain, False, "Check by User"))
             
-            return create_http_reachability_txt_output(data=HTTP_SUBDOMAINS_REACHABILITY) 
+            return create_http_reachability_txt_output(data=self.HTTP_SUBDOMAINS_REACHABILITY) 
         
         check_https_subdomains_reachability(SUBDOMAINS=self.SUBDOMAINS_DATA)
         check_http_subdomains_reachability(SUBDOMAINS=self.SUBDOMAINS_DATA)
+    
+    def return_subdomains_data(self):
+        return self.SUBDOMAINS_DATA
 
-    # TO DO
-    def create_subdomains_screenshots():
-
-        def create_screenshots_folder():
-            pass
+    def return_reachability_data(self):
+        return self.HTTP_SUBDOMAINS_REACHABILITY, self.HTTPS_SUBDOMAINS_REACHABILITY
         
     def check(self):
         self.create_headers()
