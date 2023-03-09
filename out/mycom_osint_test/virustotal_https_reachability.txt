@@ -1,15 +1,15 @@
-HTTP SUBDOMAINS REACHABILITY
+HTTPS SUBDOMAINS REACHABILITY
 
 Subomain                         Is reachable                     Status
                           
-mycom.cz                         Redirect                         301/302                          
-podpora.mycom.cz                 Redirect                         301/302                          
-autodiscover.mycom.cz            Redirect                         301/302                          
+mycom.cz                         True                             200                              
+podpora.mycom.cz                 True                             200                              
+autodiscover.mycom.cz            False                            500                              
 test.mycom.cz                    False                            500                              
 ftp.mycom.cz                     False                            500                              
 reaqta.mycom.cz                  False                            500                              
 forticems.mycom.cz               Redirect                         301/302                          
-dev.mycom.cz                     Redirect                         301/302                          
-support.mycom.cz                 Redirect                         301/302                          
+dev.mycom.cz                     False                            500                              
+support.mycom.cz                 True                             200                              
 www.mycom.cz                     Redirect                         301/302                          
 seminar.mycom.cz                 False                            500                              

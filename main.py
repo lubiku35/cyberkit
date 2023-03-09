@@ -1,4 +1,4 @@
-from modules import dns, shodan, virustotal, whois
+from modules import dns, shodan, virustotal, whois, screenshots
 
 import re, os
 from dotenv import load_dotenv
@@ -51,9 +51,11 @@ class Main:
                     CALLBACK_VIRUSTOTAL.process_virustotal_lookup()
                     CALLBACK_VIRUSTOTAL.process_subdomains_reachability()
                     self.SUBDOMAINS_DATA = CALLBACK_VIRUSTOTAL.return_subdomains_data()
+                    HTTP_SUBDOMAINS_REACHABILITY, HTTPS_SUBDOMAINS_REACHABILITY = CALLBACK_VIRUSTOTAL.return_reachability_data()
                     CALLBACK_SHODAN = shodan.ShodanLookup(self.target_info, api_key=self.API_keys.get("SHODAN_API_KEY"), SUBDOMAINS_DATA=self.SUBDOMAINS_DATA)
-                    x = CALLBACK_SHODAN.collect_shodan_data()
-                    print(x)
+                    CALLBACK_SHODAN.collect_shodan_data()
+                    CALLBACK_SCREENSHOTS = screenshots.Screenshot(HTTP_SUBDOMAINS_REACHABILITY=HTTP_SUBDOMAINS_REACHABILITY, HTTPS_SUBDOMAINS_REACHABILITY=HTTPS_SUBDOMAINS_REACHABILITY)
+                    CALLBACK_SCREENSHOTS.check()
                     break
                 if USER_CHOICE == "-v":
                     print("Calling virustotal script\n")

@@ -88,8 +88,9 @@ class Virustotal:
             self.HTTPS_SUBDOMAINS_REACHABILITY = []
             for subdomain in SUBDOMAINS.keys():
                 try:
-                    RESPONSE = requests.get(url=f"http://{subdomain}", timeout=10)
+                    RESPONSE = requests.get(url=f"https://{subdomain}", timeout=10, allow_redirects=False)
                     if RESPONSE.status_code == 200: self.HTTPS_SUBDOMAINS_REACHABILITY.append((subdomain, True, "200"))
+                    elif RESPONSE.status_code == 301 or RESPONSE.status_code == 302: self.HTTPS_SUBDOMAINS_REACHABILITY.append((subdomain, "Redirect", "301/302"))
                 except requests.exceptions.RequestException as e: self.HTTPS_SUBDOMAINS_REACHABILITY.append((subdomain, False, "500")) if "[Errno 11001]" or "getaddrinfo failed" in str(e) else self.HTTPS_SUBDOMAINS_REACHABILITY.append((subdomain, False, "Check by User"))
                 
             return create_https_reachability_txt_output(data=self.HTTPS_SUBDOMAINS_REACHABILITY)
@@ -110,8 +111,9 @@ class Virustotal:
             self.HTTP_SUBDOMAINS_REACHABILITY = []
             for subdomain in SUBDOMAINS.keys():
                 try:
-                    RESPONSE = requests.get(url=f"http://{subdomain}", timeout=10)
+                    RESPONSE = requests.get(url=f"http://{subdomain}", timeout=10, allow_redirects=False)
                     if RESPONSE.status_code == 200: self.HTTP_SUBDOMAINS_REACHABILITY.append((subdomain, True, "200"))
+                    elif RESPONSE.status_code == 301 or RESPONSE.status_code == 302: self.HTTP_SUBDOMAINS_REACHABILITY.append((subdomain, "Redirect", "301/302"))
                 except requests.exceptions.RequestException as e: self.HTTP_SUBDOMAINS_REACHABILITY.append((subdomain, False, "500")) if "[Errno 11001]" or "getaddrinfo failed" in str(e) else self.HTTP_SUBDOMAINS_REACHABILITY.append((subdomain, False, "Check by User"))
             
             return create_http_reachability_txt_output(data=self.HTTP_SUBDOMAINS_REACHABILITY) 
