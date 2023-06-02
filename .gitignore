@@ -4,5 +4,4 @@ data/*
 scripts/*
 .out/*
 geckodriver.log
-test_script.py
-test_script_.py
+./backup/
